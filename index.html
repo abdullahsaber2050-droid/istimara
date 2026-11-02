@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>استمارة جمع المعلومات النفسية والزوجية</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--tx:#1f2a2e;--mu:#6b777b;--pr:#1f6f6b;--pl:#dcefed;--bd:#e0dcd2;--wn:#fbe9e7;--wt:#9b2c20;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14191b;--card:#1d2528;--tx:#e8eeee;--mu:#97a6a9;--pr:#59b7b1;--pl:#223a39;--bd:#2f3b3e;--wn:#3a1f1c;--wt:#ffb4a8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.7}
+.w{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:1.25rem;margin:4px 0}
+.sub{color:var(--mu);font-size:.9rem;margin:0 0 12px}
+.note{background:var(--pl);border-radius:12px;padding:10px 14px;font-size:.88rem;margin-bottom:12px}
+.tabs{display:flex;gap:8px;margin-bottom:10px}
+.tab{flex:1;padding:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:12px;font:inherit;cursor:pointer}
+.tab.on{background:var(--pr);color:#fff;border-color:var(--pr)}
+.pb{height:10px;background:var(--bd);border-radius:9px;overflow:hidden}
+.pb i{display:block;height:100%;width:0;background:var(--pr);transition:width .3s}
+.pl{display:flex;justify-content:space-between;font-size:.85rem;color:var(--mu);margin:4px 0 10px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px}
+.chip{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;cursor:pointer}
+.chip.on{background:var(--pr);color:#fff}
+.chip.dn{border-color:var(--pr)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:10px 0}
+.card h2{font-size:1.05rem;margin:0 0 6px;color:var(--pr)}
+.q{padding:12px 0;border-top:1px solid var(--bd)}
+.q:first-of-type{border-top:0}
+.qt{font-weight:600;margin-bottom:8px}
+.qt b{color:var(--pr);margin-left:6px}
+.o{display:flex;flex-wrap:wrap;gap:8px}
+.o button{padding:7px 14px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:20px;font:inherit;cursor:pointer}
+.o button.on{background:var(--pr);color:#fff;border-color:var(--pr)}
+textarea{width:100%;min-height:90px;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit;resize:vertical}
+.nav{display:flex;gap:8px;margin:12px 0}
+.btn{padding:10px 16px;border-radius:12px;border:1px solid var(--pr);background:var(--pr);color:#fff;font:inherit;cursor:pointer}
+.btn.g{background:transparent;color:var(--pr)}
+.nav .btn{flex:1}
+.warn{background:var(--wn);color:var(--wt);border-radius:12px;padding:10px 14px;margin:10px 0;font-size:.92rem;display:none}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.sum{white-space:pre-wrap;font-size:.88rem}
+@media print{.tabs,.chips,.nav,.tools,.note{display:none}.card{break-inside:avoid}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>استمارة جمع المعلومات النفسية والزوجية</h1>
+<p class="sub">بهدف فهم المشكلة ووضع خطة علمية لإصلاح العلاقة الزوجية — إعداد الباحث عبد الله صابر</p>
+<div class="note">هذه الاستمارة ليست اختباراً نفسياً ولا تُشخّص، ولا تهدف لإدانة أي طرف. أجيبوا بصدق. أسئلة الصحة الجسدية والنفسية تحتاج تقييماً من مختص. تُحفظ الإجابات على هذا الجهاز فقط.</div>
+<div class="tabs"><button class="tab on" data-w="w">إجابات الزوجة</button><button class="tab" data-w="h">إجابات الزوج</button></div>
+<div class="pl"><span>نسبة الإنجاز</span><b id="pct">0%</b></div>
+<div class="pb"><i id="bar"></i></div>
+<div class="chips" id="chips"></div>
+<div class="warn" id="warn"><b>تنبيه سلامة:</b> الإجابة عن سؤال العنف أو التهديد ليست «لا». يُنصح بعدم البدء بأي خطة إصلاح قبل استشارة مختص أو جهة دعم موثوقة، وبأولوية الأمان.</div>
+<div id="sec"></div>
+<div class="nav"><button class="btn g" id="prev">السابق</button><button class="btn" id="next">التالي</button></div>
+<div class="card" id="sumc" style="display:none"><h2>الملخص</h2><div class="sum" id="sum"></div></div>
+<div class="tools">
+<button class="btn g" id="show">عرض الملخص</button>
+<button class="btn g" id="copy">نسخ الإجابات</button>
+<button class="btn g" id="print">طباعة / حفظ</button>
+<button class="btn g" id="reset">إعادة إدخال البيانات</button>
+</div>
+</div>
+<script>
+const Y=["نعم","لا"],YM=["نعم","لا","إلى حد ما"],YK=["نعم","لا","لا أعرف"],YS=["نعم","لا","أحيانا"],F=["دائما","أحيانا","نادرا","أبدا"];
+const S=[
+["المحور الأول — تاريخ المشكلة وبدايتها",[
+["هل كانت رغبة الزوج طبيعية في بداية الزواج؟",YM],["هل تراجعت رغبته تدريجيا أم انخفضت فجأة؟",["تدريجيا","فجأة","منذ البداية"]],["هل توجد فترات تعود فيها الرغبة بصورة طبيعية؟",YS],["هل المشكلة مستمرة طوال السنوات العشر؟",["نعم","لا","متقطعة"]],["هل حدثت أزمة أو تغير كبير في حياته قبل ظهور المشكلة؟",Y],["هل كان أكثر اهتماما بالعلاقة في فترة الخطوبة؟",YM]]],
+["المحور الثاني — طبيعة الرغبة الجنسية",[
+["هل يبادر الزوج بالعلاقة من تلقاء نفسه؟",F],["عندما تبادر الزوجة هل يستجيب؟",["غالبا","أحيانا","نادرا","يرفض"]],["هل يبدو مستمتعا بالعلاقة؟",YS],["هل توجد مشكلة في الانتصاب؟",YK],["هل توجد مشكلة في استمرار الانتصاب أو القذف؟",YK],["هل يشعر بالرغبة الجنسية من تلقاء نفسه؟",["نعم","أحيانا","نادرا","لا"]],["هل تختلف رغبته باختلاف الظروف والمواقف؟",YK],["كيف تصفين معدل العلاقة الزوجية؟",["منتظمة","متباعدة","نادرة جدا"]]]],
+["المحور الثالث — الحالة النفسية للزوج",[
+["هل يستمتع بالحياة عموما؟",YM],["هل يعاني تقلبات مزاجية واضحة؟",YS],["هل يمر بفترات من الحزن أو الانسحاب أو العصبية؟",YS],["هل يحب الخروج والرحلات والأصدقاء والهوايات؟",YM],["هل يعاني ضغوطا مهنية أو مالية أو أسرية؟",YK],["هل يشعر بالفشل أو عدم القيمة؟",YK],["هل يعاني اضطرابات في النوم؟",YS],["هل سبق أن راجع طبيبا نفسيا أو تناول أدوية نفسية؟",YK]]],
+["المحور الرابع — السلوك العاطفي داخل الزواج",[
+["هل الزوج حنون في التعامل اليومي؟",YS],["هل يعبر عن حبه بالكلام أو الأفعال؟",F],["هل يحتضن زوجته أو يقبلها دون توقع علاقة جنسية؟",YS],["هل يهتم بمشاعرها عندما تكون حزينة؟",F],["عندما تتحدث عن احتياجاتها كيف يستجيب؟",["يستمع","يغضب","ينسحب","يتفهم"]],["هل يعترف بوجود مشكلة زوجية؟",YS],["هل تحدث معها عن أسباب انخفاض رغبته؟",Y],["هل يتهمها بالمبالغة أو كثرة المطالب؟",F]]],
+["المحور الخامس — العوامل الصحية والسلوكية",[
+["هل الزوج مدخن؟",Y],["هل يعاني أمراضا مزمنة؟",YK],["هل يتناول أدوية بصورة منتظمة؟",YK],["هل يعاني إرهاقا مستمرا أو قلة نشاط بدني؟",YS],["هل يستخدم الهاتف والإنترنت بصورة مفرطة؟",YS],["هل توجد مؤشرات موثوقة على مشاهدة مواد إباحية بصورة متكررة؟",YK],["هل توجد مشكلات ثقة أو شكوك أو خيانة؟",YK]]],
+["المحور السادس — الحالة النفسية للزوجة",[
+["هل كنت تعانين الحزن أو القلق قبل الزواج؟",Y],["هل نوبات البكاء مرتبطة بالدورة الشهرية؟",["نعم","لا","أحيانا","لا أعرف"]],["هل تشعرين بأنك غير مرغوبة أو أقل من غيرك؟",F],["هل أصبحت سريعة الانفعال مع أولادك أو المحيطين بك؟",YS],["هل تستطيعين الاستمتاع بحياتك عندما يكون زوجك بعيدا؟",YM],["هل لديك أشخاص تثقين بهم وتتحدثين معهم؟",Y],["هل تفكرين في الطلاق باعتباره رغبة حقيقية أم هروبا من الألم؟",["رغبة حقيقية","هروب من الألم","الاثنان","غير محدد"]]]],
+["المحور السابع — الخلافات والتفاعل بين الزوجين",[
+["عندما تحاولين الابتعاد عنه كيف يتصرف؟",["يقترب","يتجاهل","يغضب","يقلب الموقف"]],["هل يجعلك تشعرين بأنك المخطئة دائما؟",YS],["هل يستخدم الصمت أو التجاهل أو التهديد أثناء الخلاف؟",YS],["هل يعتذر عندما يخطئ؟",F],["هل يعترف بمشاعرك حتى عندما يختلف معك؟",YS],["هل سبق أن أبدى رغبة حقيقية في إصلاح العلاقة؟",YS]]],
+["المحور الثامن — الاستعداد للعلاج ومستقبل الزواج",[
+["هل الزوج مستعد لزيارة طبيب نفسي؟",["نعم","لا","متردد"]],["هل لديه استعداد للمشاركة في علاج زوجي؟",["نعم","لا","متردد"]],["هل ما زلت ترغبين في استمرار الزواج إذا حدث تغيير حقيقي؟",["نعم","لا","غير متأكدة"]],["هل توجد جوانب إيجابية في العلاقة ترغبين في الحفاظ عليها؟",Y],["هل يوجد عنف أو تهديد أو تخويف أو إكراه داخل العلاقة؟",["نعم","لا","أفضل التوضيح"]],["ما أكثر شيء تتمنين تغييره في زوجك بخلاف العلاقة الجنسية؟",null]]],
+["المحور التاسع — أسئلة مفتوحة تفصيلية",[
+["صفي لنا يوما عاديا بينك وبين زوجك من وقت الاستيقاظ حتى النوم.",null],["ما أكثر موقف شعرت فيه أنك مرفوضة أو مهملة من زوجك؟",null],["هل تتذكرين آخر فترة شعرت فيها بالسعادة والرضا داخل زواجك؟ وماذا كان مختلفا وقتها؟",null],["ما الذي يحدث عادة عندما تحاولين الحديث معه عن المشكلة؟ اذكري مثالا واقعيا.",null],["هل تعتقدين أن زوجك يعاني هو أيضا من هذه المشكلة أم أنه لا يشعر بوجود مشكلة أساسا؟ ولماذا؟",null],["لو استطعت تغيير ثلاثة أشياء فقط في علاقتكما فما هي؟ (١ — ٢ — ٣)",null],["ما الذي تحتاجينه من زوجك حتى تشعري بالأمان والرضا والاستقرار؟",null],["هل هناك معلومات أخرى تعتقدين أنها مهمة لفهم حالتكما ولم نسأل عنها؟",null]]]
+];
+let n=0;S.forEach(s=>s[1].forEach(q=>q.push(++n)));
+const TOTAL=n,KEY="istimara_v1";
+let st={w:{},h:{}},who="w",cur=0;
+try{const r=localStorage.getItem(KEY);if(r)st=JSON.parse(r)}catch(e){}
+const $=i=>document.getElementById(i);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const done=k=>Object.values(st[k]).filter(v=>v&&String(v).trim()).length;
+function prog(){const p=Math.round(done(who)/TOTAL*100);$("pct").textContent=p+"%";$("bar").style.width=p+"%";
+ const a=st[who][55];$("warn").style.display=(a&&a!=="لا")?"block":"none";
+ document.querySelectorAll(".chip").forEach((c,i)=>c.classList.toggle("dn",S[i][1].every(q=>st[who][q[2]])))}
+function render(){
+ $("chips").innerHTML=S.map((s,i)=>`<button class="chip${i===cur?" on":""}" data-i="${i}">${i+1}</button>`).join("");
+ const s=S[cur];
+ $("sec").innerHTML=`<div class="card"><h2>${s[0]}</h2>`+s[1].map(q=>`<div class="q"><div class="qt"><b>${q[2]}</b>${q[0]}</div>`+(q[1]?`<div class="o">${q[1].map(o=>`<button data-q="${q[2]}" data-v="${o}" class="${st[who][q[2]]===o?"on":""}">${o}</button>`).join("")}</div>`:`<textarea data-t="${q[2]}" placeholder="أدخلي التفاصيل بكل حرية وسرية..."></textarea>`)+`</div>`).join("")+`</div>`;
+ document.querySelectorAll("textarea").forEach(t=>t.value=st[who][t.dataset.t]||"");
+ $("prev").style.visibility=cur?"visible":"hidden";$("next").textContent=cur===S.length-1?"إنهاء وعرض الملخص":"التالي";
+ prog();
+}
+$("sec").addEventListener("click",e=>{const b=e.target.closest("button[data-q]");if(!b)return;const k=b.dataset.q;st[who][k]=st[who][k]===b.dataset.v?"":b.dataset.v;save();render()});
+$("sec").addEventListener("input",e=>{const t=e.target.dataset.t;if(t){st[who][t]=e.target.value;save();prog()}});
+$("chips").addEventListener("click",e=>{const c=e.target.closest(".chip");if(c){cur=+c.dataset.i;render();scrollTo(0,0)}});
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{who=b.dataset.w;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));render()});
+$("prev").onclick=()=>{if(cur){cur--;render();scrollTo(0,0)}};
+$("next").onclick=()=>{if(cur<S.length-1){cur++;render();scrollTo(0,0)}else summary()};
+function text(){let o="استمارة جمع المعلومات — إجابات "+(who==="w"?"الزوجة":"الزوج")+"\n";S.forEach(s=>{o+="\n"+s[0]+"\n";s[1].forEach(q=>{o+=q[2]+". "+q[0]+"\n   ← "+(st[who][q[2]]||"—")+"\n"})});return o}
+function summary(){$("sum").textContent=text();$("sumc").style.display="block";$("sumc").scrollIntoView({behavior:"smooth"})}
+$("show").onclick=summary;
+$("copy").onclick=async()=>{try{await navigator.clipboard.writeText(text());$("copy").textContent="تم النسخ"}catch(e){summary();$("copy").textContent="حدّدي النص وانسخيه"}setTimeout(()=>$("copy").textContent="نسخ الإجابات",2000)};
+$("print").onclick=()=>{summary();try{print()}catch(e){}};
+let rc=false;
+$("reset").onclick=()=>{if(!rc){rc=true;$("reset").textContent="اضغط مرة أخرى لمسح إجابات هذا الطرف";setTimeout(()=>{rc=false;$("reset").textContent="إعادة إدخال البيانات"},4000);return}
+ st[who]={};save();rc=false;$("reset").textContent="إعادة إدخال البيانات";$("sumc").style.display="none";cur=0;render()};
+render();
+</script>
+</body>
+</html>
